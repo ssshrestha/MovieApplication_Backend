@@ -27,7 +27,6 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> saveUser(@RequestBody User user) throws UserAlreadyExistsException {
-        System.out.println("Inside Register Controller of auth");
         User userObj= userAuthenticationService.saveUser(user);
         return new ResponseEntity<String>("User Registered", HttpStatus.CREATED);
     }

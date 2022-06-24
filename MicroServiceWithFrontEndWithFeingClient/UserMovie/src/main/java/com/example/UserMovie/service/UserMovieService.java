@@ -2,7 +2,9 @@ package com.example.UserMovie.service;
 
 import com.example.UserMovie.entity.Movie;
 import com.example.UserMovie.entity.User;
+import com.example.UserMovie.exception.MovieNotFoundException;
 import com.example.UserMovie.exception.UserAlreadyExistsException;
+import com.example.UserMovie.exception.UserNotFoundException;
 import com.example.UserMovie.proxy.IUserProxy;
 import com.example.UserMovie.repository.IUserMovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,6 @@ public class UserMovieService {
 
     public User registerUser(User user) {
         iUserProxy.saveUser(user);
-        System.out.println("Inside UserMovie Service");
         return iUserMovieRepository.save(user);
 
     }
@@ -43,11 +44,80 @@ public class UserMovieService {
         return user;
     }
 
+    public List<Movie> getAllUserMovies(String email) throws UserNotFoundException {
+        if(iUserMovieRepository.findById(email).isEmpty())
+        {
+            throw new UserNotFoundException();
+        }
+        return iUserMovieRepository.findById(email).get().getMovieList();
+    }
+
+
+    public User deleteUserMovieFromList(String email, String movieId) throws UserNotFoundException, MovieNotFoundException {
+        boolean movieIdIsPresent = false;
+        if(iUserMovieRepository.findById(email).isEmpty())
+        {
+            throw new UserNotFoundException();
+        }
+        User user = iUserMovieRepository.findById(email).get();
+        List<Movie> movies = user.getMovieList();
+        movieIdIsPresent = movies.removeIf(x->x.getMovieId().equals(movieId));
+        if(!movieIdIsPresent)
+        {
+            throw new MovieNotFoundException();
+        }
+        user.setMovieList(movies);
+        return iUserMovieRepository.save(user);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //    public Movie saveUserMovieToList(Movie movie){
 //        return iUserMovieRepository.save(movie);
 //    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //
 //    public List<Movie> getAllMovies() {
 //        return iUserMovieRepository.findAll();

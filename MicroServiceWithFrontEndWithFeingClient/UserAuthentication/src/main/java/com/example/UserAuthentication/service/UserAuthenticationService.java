@@ -14,7 +14,6 @@ public class UserAuthenticationService {
     IUserRepository iUserRepository;
 
     public User saveUser(User user){
-        System.out.println("Inside User Service");
         return iUserRepository.save(user);
     }
 
