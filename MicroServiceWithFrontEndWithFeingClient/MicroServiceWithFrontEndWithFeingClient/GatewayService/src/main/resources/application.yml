@@ -1,0 +1,13 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: api-gateway-service
+  main:
+    web-application-type: reactive
+eureka:
+  client:
+    serverUrl:
+    defaultZone: http://localhost:8761
+    fetchRegistry: true
+    registerWithEureka: true
