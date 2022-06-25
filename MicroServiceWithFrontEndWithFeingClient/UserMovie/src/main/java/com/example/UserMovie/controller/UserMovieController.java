@@ -37,7 +37,7 @@ public class UserMovieController {
 
 
     //save movie to particular user
-    @PostMapping("/user/{email}/movie")
+    @PostMapping("/user/movie/{email}")
     public ResponseEntity<?> saveFavouriteProducts(@RequestBody Movie movie, @PathVariable String email){
         return new ResponseEntity<>(userMovieService.saveUserMovieToList(movie, email), HttpStatus.OK);
     }
