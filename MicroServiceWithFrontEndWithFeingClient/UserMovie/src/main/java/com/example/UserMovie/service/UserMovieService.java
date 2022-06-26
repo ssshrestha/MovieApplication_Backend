@@ -53,7 +53,7 @@ public class UserMovieService {
     }
 
 
-    public User deleteUserMovieFromList(String email, String movieId) throws UserNotFoundException, MovieNotFoundException {
+    public User deleteUserMovieFromList(String email, int movieId) throws UserNotFoundException, MovieNotFoundException {
         boolean movieIdIsPresent = false;
         if(iUserMovieRepository.findById(email).isEmpty())
         {
@@ -61,7 +61,7 @@ public class UserMovieService {
         }
         User user = iUserMovieRepository.findById(email).get();
         List<Movie> movies = user.getMovieList();
-        movieIdIsPresent = movies.removeIf(x->x.getMovieId().equals(movieId));
+        movieIdIsPresent = movies.removeIf(x->x.getMovieId()==(movieId));
         if(!movieIdIsPresent)
         {
             throw new MovieNotFoundException();
@@ -71,10 +71,36 @@ public class UserMovieService {
     }
 
 
+    public Movie getMovieById(String email, int movieId) throws UserNotFoundException, MovieNotFoundException {
+        Movie movieIdIsPresent;
+        if(iUserMovieRepository.findById(email).isEmpty())
+        {
+            throw new UserNotFoundException();
+        }
+        User user = iUserMovieRepository.findById(email).get();
+        List<Movie> movies = user.getMovieList();
+        movieIdIsPresent = movies.get(movieId-1);
+
+        return movieIdIsPresent;
+    }
 
 
-
-
+    public User updateMovieDetails(String email, int movieId, Movie movie) throws UserNotFoundException {
+        User user = iUserMovieRepository.findByEmail(email);
+        if (user != null) {
+            List<Movie> movieList = user.getMovieList();
+            for (int i = 0; i < movieList.size(); i++) {
+                if (movieList.get(i).getMovieName().equals(movieId)){
+                    movieList.set(i, movie);
+                    break;
+                }
+            }
+            user.setMovieList(movieList);
+            iUserMovieRepository.save(user);
+            return user;
+        }
+        throw new UserNotFoundException();
+    }
 
 
 

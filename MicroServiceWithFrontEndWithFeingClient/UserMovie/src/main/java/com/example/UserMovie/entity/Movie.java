@@ -1,11 +1,11 @@
 package com.example.UserMovie.entity;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+
 //@Document:- Movie Documents will be stored as embedded document
 public class Movie {
     @Id
-    private String movieId;
+    private int movieId;
     private String movieName;
     private String genre;
     private int rating;
@@ -13,11 +13,11 @@ public class Movie {
     public Movie() {
     }
 
-    public String getMovieId() {
+    public int getMovieId() {
         return movieId;
     }
 
-    public void setMovieId(String movieId) {
+    public void setMovieId(int movieId) {
         this.movieId = movieId;
     }
 

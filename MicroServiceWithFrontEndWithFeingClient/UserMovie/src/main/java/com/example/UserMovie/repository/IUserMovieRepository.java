@@ -1,5 +1,6 @@
 package com.example.UserMovie.repository;
 
+import com.example.UserMovie.entity.Movie;
 import com.example.UserMovie.entity.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 

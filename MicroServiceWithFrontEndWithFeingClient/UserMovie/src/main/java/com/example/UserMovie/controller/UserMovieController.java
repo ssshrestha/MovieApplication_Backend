@@ -54,6 +54,18 @@ public class UserMovieController {
         return responseEntity;
     }
 
+    @GetMapping("/user/{email}/{movieId}")
+    public ResponseEntity<?> getMovieById(@PathVariable String email,@PathVariable int movieId)
+            throws UserNotFoundException, MovieNotFoundException
+    {
+        try {
+            responseEntity = new ResponseEntity<>(userMovieService.getMovieById(email, movieId), HttpStatus.OK);
+        } catch (UserNotFoundException | MovieNotFoundException m) {
+            throw new MovieNotFoundException();
+        }
+        return responseEntity;
+    }
+
 
     @PutMapping("/user/{email}")
     public ResponseEntity<?> updateUserProductFromList(@PathVariable(value = "email") String email,
@@ -69,9 +81,22 @@ public class UserMovieController {
         return ResponseEntity.ok(updatedUser);
     }
 
+    @PutMapping("/user/{email}/movie/{movieId}")
+    public ResponseEntity<?> updateMovie(@PathVariable String email, @PathVariable int movieId, @RequestBody Movie movie) throws UserNotFoundException {
+//        return new ResponseEntity<>(userMovieService.updateMovieDetails(email, movieId, movie), HttpStatus.OK);
+        User user = iUserMovieRepository.findByEmail(email);
+        movie.setMovieId(movie.getMovieId());
+        movie.setMovieName(movie.getMovieName());
+        movie.setGenre(movie.getGenre());
+        movie.setRating(movie.getRating());
+
+        final User updatedMovie = iUserMovieRepository.save(user);
+        return ResponseEntity.ok(updatedMovie);
+    }
+
 
     @DeleteMapping("/user/{email}/{movieId}")
-    public ResponseEntity<?> deleteUserProductFromList(@PathVariable String email,@PathVariable String movieId)
+    public ResponseEntity<?> deleteUserProductFromList(@PathVariable String email,@PathVariable int movieId)
             throws UserNotFoundException, MovieNotFoundException
     {
         try {
